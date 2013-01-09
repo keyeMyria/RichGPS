@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JS Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body, #map_canvas {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+      var map;
+      var currentPos;
+      var cLat;
+      var cLong;
+      var markers = {};
+      var paths = {};
+      var markerOptions;
+      var pathOptions;
+
+      function initialize() {
+        cLat = 57.2;
+        cLong = -2.1;
+        currentPos = new google.maps.LatLng(cLat, cLong);
+        var mapOptions = {
+          zoom: 8,
+          center: currentPos,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById('map_canvas'),
+        mapOptions);
+
+        google.maps.event.addListener(map, 'click', function(event) {
+          var params = {};
+          params.id = "1";
+          params.report_time = (new Date()).getTime();
+          params.time = params.report_time;
+          params.status = {};
+          params.status.lat = event.latLng.lat();
+          params.status.lng = event.latLng.lng();
+          params.status.speed = 0;
+          var paramString = JSON.stringify(params);
+          var req = new XMLHttpRequest();
+          req.open("POST", "http://ronstorrents.hopto.org/gps/add/key1");
+          req.setRequestHeader("Content-type", "application/json");
+          req.setRequestHeader("Content-length", paramString.length);
+
+          req.send(paramString);
+        });
+        markerOptions = {
+          map: map,
+        };
+        pathOptions = {
+          map: map,
+        };
+      }
+
+      function drawPath(id) {
+        var req = new XMLHttpRequest();
+        req.open("GET", "http://ronstorrents.hopto.org/gps/history/" + id + "/", true);
+        req.onreadystatechange = function() {
+          if (req.readyState == 4) {
+            var results = JSON.parse(req.responseText);
+            if (!(id in paths)) {
+              paths[id] = new google.maps.Polyline(pathOptions);
+            }
+            var newPath = [];
+            for (var i = 0; i < results.length; i++) {
+              newPath.push(new google.maps.LatLng(results[i].lat, results[i].lng));
+            }
+            paths[id].setPath(newPath);
+          }
+        }
+        req.send();
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+      window.setTimeout("Tick()", 5000);
+
+      function Tick() {
+        window.setTimeout("Tick()", 5000);
+
+        var req = new XMLHttpRequest();
+        req.open("GET", "http://ronstorrents.hopto.org/gps/current/", true);
+        req.onreadystatechange = function() {
+          if (req.readyState == 4) {
+            var results = JSON.parse(req.responseText);
+            for (var i = 0; i < results.length; i++) {
+              var id = results[i].id;
+              if (!(id in markers)) {
+                markers[id] = new google.maps.Marker(markerOptions);
+              }
+              markers[id].setPosition(new google.maps.LatLng(results[i].lat, results[i].lng));
+              drawPath(id);
+            }
+          }
+        }
+        req.send();
+      }
+    </script>
+  </head>
+  <body>
+    <div id="map_canvas"></div>
+  </body>
+</html>

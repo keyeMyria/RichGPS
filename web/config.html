@@ -1,0 +1,44 @@
+<html>
+  <body>
+    <input id="reset" type="button" value="Reset data" onClick="resetData();" /><br />
+    <br />
+    Waypoint ID: <input type="text" id="waypoint" /><br />
+    Time: <input type="text" id="due_time" /><br />
+    <input type="button" value="Schedule" onClick="schedule();" /><br />
+    <br />
+    Waypoint name: <input type="text" id="wp_name" /><br />
+    <input type="button" value="Add waypoint" onClick="add_waypoint();" /><br />
+    <script>
+      function resetData() {
+        var req = new XMLHttpRequest();
+        req.open("DELETE", "http://ronstorrents.hopto.org/gps/reset");
+        req.send();
+      }
+      function schedule() {
+        var params = {};
+        params.id = "1";
+        params.waypoint = document.getElementById("waypoint").value;
+        params.due_time = document.getElementById("due_time").value;
+        var paramString = JSON.stringify(params);
+        var req = new XMLHttpRequest();
+        req.open("POST", "http://ronstorrents.hopto.org/gps/add_schedule");
+        req.setRequestHeader("Content-type", "application/json");
+        req.setRequestHeader("Content-length", paramString.length);
+
+        req.send(paramString);
+      }
+      function add_waypoint() {
+        var params = {};
+        params.waypoint_name = document.getElementById("wp_name").value;
+        var paramString = JSON.stringify(params);
+        var req = new XMLHttpRequest();
+        req.open("POST", "http://ronstorrents.hopto.org/gps/add_waypoint");
+        req.setRequestHeader("Content-type", "application/json");
+        req.setRequestHeader("Content-length", paramString.length);
+
+        req.send(paramString);
+
+      }
+    </script>
+  </body>
+</html>
