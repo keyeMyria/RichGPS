@@ -4,7 +4,7 @@ REST API
 
 Data:
 
-Status {'lat' : num, 'lng' : num, 'speed' , num}
+Status {'lat' : num, 'lng' : num, 'speed' : num}
 Report (Old) {'id' : num, 'time' : num, 'lat' : num, 'lng' : num, 'speed' : num}
 Report (New) {'id' : num, 'time' : num, 'report_time' : num, 'status' : status}
 
@@ -12,7 +12,7 @@ Endpoints:
 
 GET gps/current/
 Report current locations of all vehicles
-Returns array of Report (Old)- 
+Returns array of Report (Old)
 
 GET gps/current/ID/
 Report current location of a single vehicle (ID)
@@ -52,3 +52,57 @@ Parameters: {'waypoint_name' : string}
 POST gps/visit_waypoint/KEY/
 Report the arrival of a vehicle at a waypoint, using API key (KEY).
 Parameters: {'id' : num, 'waypoint' : num, 'arrival_time' : num}
+
+------Suggested Changes------
+
+Location {'lat' : num, 'lng' : num}
+Status {'lat' : num, 'lng' : num, 'speed' : num, 'time' : time} //Option to add other info in here (e.g. Bearing/Altitude)
+Report {'vehicle' : num, 'report_time' : time, 'status' : status}
+Waypoint {'waypoint' : num, 'vehicle' : num, 'location' : num, 'name' : string, 'due_time' : date}
+Visit {'vehicle' : num, 'schedule' : num, 'arrival_time' : date}
+Passenger {'passenger' : num, 'name' : string}
+Pickup {'passenger' : num, 'waypoint' : num, 'pickup_time' : date}
+
+//Possibly require an API key for some/all of the GET methods.
+
+GET gps/schedule/ID/
+Return: [Waypoint]
+
+GET gps/passengers/WAYPOINT/
+Returns: [Passenger]
+
+POST gps/report/KEY/
+Parameters: Report
+
+POST gps/visit_waypoint/KEY/
+Parameters: Visit
+
+POST gps/pickup/KEY/
+Parameters: Pickup
+
+---Admin Stuff---
+
+POST gps/add_waypoint/APPKEY/
+Parameters: Waypoint
+
+POST gps/add_passenger/APPKEY/
+Parameters: {'waypoint' : num, Passenger}
+
+POST gps/set_appkey/APPKEY/
+Parameters: string
+
+POST gps/set_apikey/APPKEY/
+Parameters: {'vehicle' : num, 'apikey' : string}
+
+DELETE gps/reset/APPKEY/
+
+---Debug/Analysis Stuff---
+
+GET gps/current/
+Return: [Report]
+
+GET gps/current/ID/
+Return: Report
+
+GET gps/history/ID/
+Return: [Report]
