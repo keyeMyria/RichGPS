@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </TabWidget>
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+ 
+            <LinearLayout
+                android:id="@+id/tab1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+
+		        <Button
+		            android:id="@+id/fetch_destinations"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:text="Fetch Destinations" />
+		        
+                <ListView
+                    android:id="@+id/destination_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                </ListView>
+                
+            </LinearLayout>
+            
+            <RelativeLayout 
+                android:id="@+id/tab2"
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent" >
+			
+			    <Button
+			        android:id="@+id/toggleService"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentRight="true"
+			        android:layout_alignParentTop="true"
+			        android:text="Start Service" />
+			
+			    <TextView
+			        android:id="@+id/status"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentBottom="true"
+			        android:layout_alignParentLeft="true"
+			        android:layout_alignParentRight="true"
+			        android:text="Status" />
+			
+			    <Button
+			        android:id="@+id/setID"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentLeft="true"
+			        android:layout_alignParentTop="true"
+			        android:text="Set ID" />
+			
+			    <TextView
+			        android:id="@+id/info"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentLeft="true"
+			        android:layout_below="@+id/setID"
+			        android:text="Info"
+			        android:textAppearance="?android:attr/textAppearanceMedium" />
+			
+			</RelativeLayout>
+        </FrameLayout>
+    </LinearLayout>
+</TabHost>
