@@ -1,1 +1,54 @@
 Readme file.
+
+REST API
+
+Data:
+
+Status {'lat' : num, 'lng' : num, 'speed' , num}
+Report (Old) {'id' : num, 'time' : num, 'lat' : num, 'lng' : num, 'speed' : num}
+Report (New) {'id' : num, 'time' : num, 'report_time' : num, 'status' : status}
+
+Endpoints:
+
+GET gps/current/
+Report current locations of all vehicles
+Returns array of Report (Old)- 
+
+GET gps/current/ID/
+Report current location of a single vehicle (ID)
+Returns Report (Old)
+
+GET gps/history/ID/
+Report all history for single vehicle (ID)
+Returns array of Report (Old), minus 'id' field.
+
+GET gps/history/ID/SINCE/
+Report history after a certain time (SINCE) for a single vehicle (ID)
+Returns array of Report (Old), minus 'id' field.
+
+POST gps/add/KEY/
+Add report for vehicle with API key (KEY)
+Parameters: Report (New)
+
+DELETE gps/reset/
+Reset all data; for debugging (delete vehicle histories, waypoints, schedules, etc.)
+
+GET gps/schedule/ID/
+Report unvisited waypoints and due times for a single vehicle (ID)
+Returns array of {'waypoint' : num, 'due_time' : num, 'name' : string}
+
+GET gps/waypoints/
+Report all waypoints
+Returns array of {'waypoint' : num, 'name' : string}
+
+POST gps/add_schedule/
+Add a new schedule item ('id' is vehicle ID, 'waypoint' is waypoint ID)
+Parameters: {'id' : num, 'waypoint' : num, 'due_time' : num}
+
+POST gps/add_waypoint/
+Add a new waypoint (waypoint ID is selected automatically).
+Parameters: {'waypoint_name' : string}
+
+POST gps/visit_waypoint/KEY/
+Report the arrival of a vehicle at a waypoint, using API key (KEY).
+Parameters: {'id' : num, 'waypoint' : num, 'arrival_time' : num}
